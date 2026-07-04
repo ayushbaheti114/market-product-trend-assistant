@@ -1,29 +1,23 @@
 """
 agents/market_matching_agent.py
----------------------------------
 Market Matching Agent.
-
 Maps a product's claims to the MANUALLY CURATED benefit categories
 (config.BENEFIT_CATEGORIES / storage.categories table) via weighted keyword
 scoring. Categories themselves are never invented by this agent -- it only
-scores against the existing taxonomy, per Strategic Decision #1.
-
-Output is a normalized score per category (sums to 1.0 across matched
+scores against the existing taxonomy, per Strategic Decision
+#1. Output is a normalized score per category (sums to 1.0 across matched
 categories) which the Revenue Attribution Agent consumes directly as
 allocation weights.
 """
 
 import os
 import sys
-
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import config
 from agents.base import BaseAgent
 
-
 class MarketMatchingAgent(BaseAgent):
     name = "MarketMatchingAgent"
-
     def __init__(self, categories: dict = None):
         # categories: {category_name: {"keywords": {kw: weight}}}
         self.categories = categories or config.BENEFIT_CATEGORIES
