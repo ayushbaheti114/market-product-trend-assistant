@@ -1,8 +1,6 @@
 """
 agents/revenue_agent.py
---------------------------
 Revenue Attribution Agent.
-
 Allocates a product's total annual revenue proportionally across the
 benefit categories it was matched to, using the weights produced by the
 Market Matching Agent. This directly replicates the manual analyst step of
@@ -12,12 +10,9 @@ straddles categories (e.g., a "Sleep + Stress" gummy).
 
 import os
 import sys
-
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from agents.base import BaseAgent
 from models import RevenueAllocation, new_id
-
-
 class RevenueAttributionAgent(BaseAgent):
     name = "RevenueAttributionAgent"
 
