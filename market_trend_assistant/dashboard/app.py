@@ -1,21 +1,17 @@
 """
 dashboard/app.py
--------------------
 Interactive dashboard (Key Capability #1-5 from the brief):
   1. Conversational querying (chat box -> OrchestratorAgent.handle_query)
   2. Drill-down analysis across categories and sub-segments
   3. Dynamic refresh (re-run pipeline button)
   4. Traceability from insight to source data (product detail view)
   5. Human-in-the-loop overrides with audit tracking
-
 Run with:  streamlit run dashboard/app.py
 """
-
 import os
 import sys
 import pandas as pd
 import streamlit as st
-
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import config
 import storage.database as db
@@ -27,21 +23,15 @@ from audit.audit_log import (
 )
 
 st.set_page_config(page_title="Market Product Trend Assistant", layout="wide")
-
 db.init_db()
 db.sync_categories()
-
 if "orchestrator" not in st.session_state:
     st.session_state.orchestrator = OrchestratorAgent()
-
 orchestrator = st.session_state.orchestrator
-
-st.title("🧪 AI-Powered Market Product Trend Assistant")
+st.title("🧪AI-Powered Market Product Trend Assistant")
 st.caption("Prototype dashboard — health & wellness supplement market intelligence")
 
-# ---------------------------------------------------------------------------
 # Sidebar: data refresh / ingestion controls
-# ---------------------------------------------------------------------------
 with st.sidebar:
     st.header("Data Controls")
     st.write("Load / refresh the sample market report and reprocess through "
@@ -73,9 +63,7 @@ with st.sidebar:
         f"Currently loaded: {len(config.BENEFIT_CATEGORIES)} categories."
     )
 
-# ---------------------------------------------------------------------------
 # Conversational query box
-# ---------------------------------------------------------------------------
 st.subheader("💬 Ask the Assistant")
 query = st.text_input(
     "Try: \"top categories\", \"sleep\", \"ingredients\", \"product NB-SLEEP-001\""
@@ -105,9 +93,7 @@ if query:
 
 st.divider()
 
-# ---------------------------------------------------------------------------
 # Main drill-down: category revenue summary
-# ---------------------------------------------------------------------------
 st.subheader("📊 Market Trend Overview")
 summary = db.category_revenue_summary()
 if summary:
@@ -124,9 +110,7 @@ else:
 
 st.divider()
 
-# ---------------------------------------------------------------------------
 # Product-level traceability + human-in-the-loop overrides
-# ---------------------------------------------------------------------------
 st.subheader("🔍 Product Traceability & Human Overrides")
 products = db.fetch_all("products")
 if products:
