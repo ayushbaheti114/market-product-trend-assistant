@@ -1,29 +1,23 @@
 """
 agents/ingredient_agent.py
-----------------------------
 Hero Ingredient Extractor Agent.
-
 Identifies key active ingredients mentioned in claim text / OCR text and
 normalizes them against config.INGREDIENT_ALIASES. The ingredient mentioned
 earliest / most frequently is flagged as the "hero" ingredient (the one the
 brand is positioning the product around), consistent with the manual
 process this system replicates.
 """
-
 import os
 import re
 import sys
 from collections import Counter
-
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import config
 from agents.base import BaseAgent
 from models import Ingredient, new_id
 
-
 class HeroIngredientExtractorAgent(BaseAgent):
     name = "HeroIngredientExtractorAgent"
-
     def _find_mentions(self, text: str):
         """Uses word-boundary regex matching rather than naive substring
         search, since short aliases like "dha" (Omega-3) would otherwise
