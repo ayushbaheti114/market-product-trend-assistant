@@ -1,9 +1,7 @@
 """
 main.py
----------
 CLI entry point / prototype demo for the AI-Powered Market Product Trend
 Assistant.
-
 Run modes:
     python main.py demo        -> loads sample_data, runs full pipeline,
                                    prints a market trend summary
@@ -17,35 +15,27 @@ This satisfies Success Criteria #4 (validated weighting logic via prototype
 testing) by giving a runnable, inspectable end-to-end pipeline over sample
 data before any real scraping/OCR integration is wired in.
 """
-
 import sys
 import os
 import json
-
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-
 import config
 import storage.database as db
 from ingestion.report_ingestor import load_json_report
 from agents.orchestrator import OrchestratorAgent
 from audit.audit_log import get_full_audit_trail
 
-
 def setup():
     db.init_db()
     db.sync_categories()
 
-
 def run_demo():
     setup()
     orchestrator = OrchestratorAgent()
-
     report_path = os.path.join(config.SAMPLE_DATA_DIR, "sample_products.json")
     loaded = load_json_report(report_path)
-
     print(f"\nLoaded {len(loaded)} products from sample report.\n")
     print("=" * 70)
-
     for product, row in loaded:
         result = orchestrator.process_product(
             product,
@@ -62,7 +52,6 @@ def run_demo():
         for cat, weight, _ in result["category_weights"]:
             alloc_rev = round(product.annual_revenue * weight, 2)
             print(f"     - {cat}: {weight*100:.1f}%  (${alloc_rev:,.0f})")
-
     print("\n" + "=" * 70)
     print("MARKET TREND SUMMARY (aggregated across all products)")
     print("=" * 70)
@@ -112,7 +101,6 @@ if __name__ == "__main__":
     if len(sys.argv) < 2:
         print("Usage: python main.py [demo|query \"<text>\"|shell|reset]")
         sys.exit(1)
-
     mode = sys.argv[1]
     if mode == "demo":
         run_demo()
