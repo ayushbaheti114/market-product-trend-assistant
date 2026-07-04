@@ -1,6 +1,5 @@
 """
 storage/database.py
---------------------
 SQLite persistence layer. Acts as the "centralized, queryable intelligence
 layer" called for in the brief (replacing spreadsheets/slides/notes).
 
@@ -15,12 +14,9 @@ import json
 import os
 from contextlib import contextmanager
 from typing import List, Dict, Optional, Any
-
 import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import config
-
-
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS products (
     product_id TEXT PRIMARY KEY,
@@ -28,45 +24,37 @@ CREATE TABLE IF NOT EXISTS products (
     annual_revenue REAL, retailer TEXT,
     raw_source TEXT, created_at TEXT
 );
-
 CREATE TABLE IF NOT EXISTS product_images (
     image_id TEXT PRIMARY KEY,
     product_id TEXT, source_url TEXT, local_path TEXT,
     ocr_text TEXT, ingested_at TEXT
 );
-
 CREATE TABLE IF NOT EXISTS claims (
     claim_id TEXT PRIMARY KEY,
     product_id TEXT, text TEXT, matched_category TEXT,
     confidence REAL, source_image_id TEXT, source_snippet TEXT,
     extraction_method TEXT
 );
-
 CREATE TABLE IF NOT EXISTS ingredients (
     ingredient_id TEXT PRIMARY KEY,
     product_id TEXT, canonical_name TEXT, raw_mention TEXT,
     is_hero INTEGER, source_claim_id TEXT
 );
-
 CREATE TABLE IF NOT EXISTS revenue_allocations (
     allocation_id TEXT PRIMARY KEY,
     product_id TEXT, category TEXT, allocated_revenue REAL,
     weight REAL, basis TEXT
 );
-
 CREATE TABLE IF NOT EXISTS categories (
     category TEXT PRIMARY KEY,
     keywords_json TEXT, updated_at TEXT
 );
-
 CREATE TABLE IF NOT EXISTS audit_log (
     entry_id TEXT PRIMARY KEY,
     entity_type TEXT, entity_id TEXT, action TEXT, actor TEXT,
     reason TEXT, before_json TEXT, after_json TEXT, timestamp TEXT
 );
 """
-
-
 @contextmanager
 def get_conn():
     conn = sqlite3.connect(config.DB_PATH)
@@ -76,16 +64,11 @@ def get_conn():
         conn.commit()
     finally:
         conn.close()
-
-
 def init_db():
     with get_conn() as conn:
         conn.executescript(SCHEMA)
-
-
-# ---------------------------------------------------------------------------
+        
 # Generic insert/query helpers
-# ---------------------------------------------------------------------------
 def _insert(table: str, row: Dict[str, Any]):
     cols = ", ".join(row.keys())
     placeholders = ", ".join(["?"] * len(row))
@@ -94,22 +77,17 @@ def _insert(table: str, row: Dict[str, Any]):
             f"INSERT OR REPLACE INTO {table} ({cols}) VALUES ({placeholders})",
             list(row.values()),
         )
-
-
 def insert_product(product) -> None:
     from models import to_dict
     _insert("products", to_dict(product))
-
-
+    
 def insert_product_image(image) -> None:
     from models import to_dict
     _insert("product_images", to_dict(image))
-
-
+    
 def insert_claim(claim) -> None:
     from models import to_dict
     _insert("claims", to_dict(claim))
-
 
 def insert_ingredient(ingredient) -> None:
     from models import to_dict
@@ -117,11 +95,9 @@ def insert_ingredient(ingredient) -> None:
     d["is_hero"] = int(d["is_hero"])
     _insert("ingredients", d)
 
-
 def insert_revenue_allocation(alloc) -> None:
     from models import to_dict
     _insert("revenue_allocations", to_dict(alloc))
-
 
 def log_audit(entry) -> None:
     from models import to_dict
@@ -131,7 +107,6 @@ def log_audit(entry) -> None:
     d["before_json"] = json.dumps(before_val) if before_val is not None else None
     d["after_json"] = json.dumps(after_val) if after_val is not None else None
     _insert("audit_log", d)
-
 
 def sync_categories():
     """Push config.BENEFIT_CATEGORIES into the DB and log the update.
@@ -154,16 +129,12 @@ def sync_categories():
         actor="system:config_sync",
         reason="Synced BENEFIT_CATEGORIES from config.py (manual curation)",
     ))
-
-
-# ---------------------------------------------------------------------------
+    
 # Query helpers used by the dashboard / orchestrator
-# ---------------------------------------------------------------------------
 def fetch_all(table: str) -> List[Dict]:
     with get_conn() as conn:
         rows = conn.execute(f"SELECT * FROM {table}").fetchall()
         return [dict(r) for r in rows]
-
 
 def fetch_where(table: str, **filters) -> List[Dict]:
     clause = " AND ".join([f"{k} = ?" for k in filters])
@@ -172,7 +143,6 @@ def fetch_where(table: str, **filters) -> List[Dict]:
             f"SELECT * FROM {table} WHERE {clause}", list(filters.values())
         ).fetchall()
         return [dict(r) for r in rows]
-
 
 def category_revenue_summary() -> List[Dict]:
     """Aggregate allocated revenue by benefit category -- the core
@@ -187,7 +157,6 @@ def category_revenue_summary() -> List[Dict]:
             ORDER BY total_revenue DESC
         """).fetchall()
         return [dict(r) for r in rows]
-
 
 def product_trace(product_id: str) -> Dict:
     """Full traceability bundle for a single product: raw record, images,
@@ -222,7 +191,6 @@ def product_trace(product_id: str) -> Dict:
         "revenue_allocations": [dict(r) for r in allocations],
         "audit_trail": [dict(r) for r in audit],
     }
-
 
 def apply_human_override(entity_type: str, entity_id: str, field_name: str,
                           new_value: Any, actor: str, reason: str):
