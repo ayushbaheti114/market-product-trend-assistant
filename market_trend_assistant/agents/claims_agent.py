@@ -1,8 +1,6 @@
 """
 agents/claims_agent.py
------------------------
 Product Claims Agent.
-
 Priority per Strategic Decision #2: packaging IMAGES are the primary claim
 source (via OCR + computer vision), with website copy as a secondary /
 future-scope input. This agent:
@@ -17,12 +15,10 @@ future-scope input. This agent:
 import os
 import re
 import sys
-
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import config
 from agents.base import BaseAgent
 from models import Claim, new_id
-
 
 class ProductClaimsAgent(BaseAgent):
     name = "ProductClaimsAgent"
