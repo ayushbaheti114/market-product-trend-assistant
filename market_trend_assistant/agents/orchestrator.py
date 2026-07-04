@@ -1,10 +1,7 @@
 """
 agents/orchestrator.py
--------------------------
 Orchestrator Agent.
-
 Two responsibilities:
-
 1. PIPELINE MODE (process_product): runs a single product through the full
    agent chain (Claims -> Ingredients -> Market Matching -> Revenue) and
    persists everything with audit logging. This is what "replicates the
@@ -19,7 +16,6 @@ Two responsibilities:
 import os
 import re
 import sys
-
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import storage.database as db
 from agents.claims_agent import ProductClaimsAgent
@@ -27,7 +23,6 @@ from agents.ingredient_agent import HeroIngredientExtractorAgent
 from agents.market_matching_agent import MarketMatchingAgent
 from agents.revenue_agent import RevenueAttributionAgent
 from agents.base import BaseAgent
-
 
 class OrchestratorAgent(BaseAgent):
     name = "OrchestratorAgent"
@@ -37,16 +32,13 @@ class OrchestratorAgent(BaseAgent):
         self.ingredient_agent = HeroIngredientExtractorAgent()
         self.market_agent = MarketMatchingAgent()
         self.revenue_agent = RevenueAttributionAgent()
-
-    # ------------------------------------------------------------------
+       
     # Pipeline mode
-    # ------------------------------------------------------------------
     def process_product(self, product, image_path: str = None,
                          fallback_ocr_text: str = "", source_image_id: str = None):
         """Runs the full agent chain for one product and persists results.
         `product` is a models.Product already inserted into the DB."""
         self.log(f"Processing product {product.product_id} ({product.name})")
-
         full_text = self.claims_agent.ocr_image(image_path, fallback_ocr_text)
         claims = self.claims_agent.run(
             product_id=product.product_id,
@@ -56,11 +48,9 @@ class OrchestratorAgent(BaseAgent):
         )
         for c in claims:
             db.insert_claim(c)
-
         ingredients = self.ingredient_agent.run(product.product_id, claims, full_ocr_text=full_text)
         for ing in ingredients:
             db.insert_ingredient(ing)
-
         category_weights = self.market_agent.run(claims)
         # write matched_category back onto claims for traceability
         for category, weight, claim_ids in category_weights:
@@ -96,10 +86,8 @@ class OrchestratorAgent(BaseAgent):
             "category_weights": category_weights,
             "allocations": allocations,
         }
-
-    # ------------------------------------------------------------------
+                            
     # Query mode (conversational dashboard)
-    # ------------------------------------------------------------------
     def handle_query(self, prompt: str) -> dict:
         """Very lightweight intent router for natural-language dashboard
         queries. Returns a dict with 'intent', 'data', and 'explanation'
