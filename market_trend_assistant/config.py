@@ -1,23 +1,17 @@
 """
 config.py
----------
 Central configuration for the AI-Powered Market Product Trend Assistant.
-
 Per the project's strategic decisions:
   - Top-level benefit categories remain under MANUAL control (Strategic Decision #1).
     They are defined here as an editable dictionary rather than being inferred by AI.
   - Packaging image analysis is prioritized over website copy (Strategic Decision #2).
-
 To update the category taxonomy, edit BENEFIT_CATEGORIES below and re-run the
 Market Matching Agent. Every change is automatically timestamped in the audit log
 when loaded through storage.database.sync_categories().
 """
 
 import os
-
-# ---------------------------------------------------------------------------
 # Paths
-# ---------------------------------------------------------------------------
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_PATH = os.path.join(BASE_DIR, "market_intel.db")
 SAMPLE_DATA_DIR = os.path.join(BASE_DIR, "sample_data")
@@ -25,11 +19,9 @@ IMAGE_CACHE_DIR = os.path.join(BASE_DIR, "image_cache")
 
 os.makedirs(IMAGE_CACHE_DIR, exist_ok=True)
 
-# ---------------------------------------------------------------------------
 # Benefit categories (MANUALLY CURATED — see Strategic Decision #1)
 # Each category maps to a set of keyword signals used by the Market Matching
 # Agent. Weight = relative importance of a keyword hit within that category.
-# ---------------------------------------------------------------------------
 BENEFIT_CATEGORIES = {
     "Sleep & Relaxation": {
         "keywords": {
@@ -92,11 +84,8 @@ BENEFIT_CATEGORIES = {
         }
     },
 }
-
-# ---------------------------------------------------------------------------
 # Hero ingredient reference dictionary (canonical name -> aliases)
 # Used by the Hero Ingredient Extractor Agent for normalization.
-# ---------------------------------------------------------------------------
 INGREDIENT_ALIASES = {
     "Ashwagandha": ["ashwagandha", "withania somnifera"],
     "Melatonin": ["melatonin"],
@@ -114,22 +103,16 @@ INGREDIENT_ALIASES = {
     "Turmeric": ["turmeric", "curcumin"],
     "Fiber": ["fiber", "inulin", "psyllium"],
 }
-
-# ---------------------------------------------------------------------------
 # Claim trigger phrases — used by the Product Claims Agent to flag
 # marketing/benefit claims within OCR'd packaging text.
-# ---------------------------------------------------------------------------
 CLAIM_TRIGGER_PHRASES = [
     "supports", "helps", "promotes", "boosts", "improves", "enhances",
     "clinically proven", "clinically studied", "reduces", "relieves",
     "maintains", "restores", "protects", "strengthens", "aids in",
 ]
-
-# ---------------------------------------------------------------------------
 # LLM integration (optional). If ANTHROPIC_API_KEY is set in the environment,
 # agents will use Claude for higher-quality extraction. Otherwise agents fall
 # back to deterministic rule-based / dictionary matching so the pipeline is
 # fully runnable offline for the prototype (Success Criteria #4).
-# ---------------------------------------------------------------------------
 USE_LLM = bool(os.environ.get("ANTHROPIC_API_KEY"))
 LLM_MODEL = "claude-sonnet-4-6"
