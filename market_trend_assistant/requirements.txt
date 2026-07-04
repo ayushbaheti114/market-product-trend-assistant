@@ -1,0 +1,13 @@
+pandas>=2.0.0
+streamlit>=1.32.0
+
+# Optional — enable real OCR on packaging images
+pytesseract>=0.3.10
+Pillow>=10.0.0
+
+# Optional — enable live retailer/brand website scraping
+requests>=2.31.0
+beautifulsoup4>=4.12.0
+
+# Optional — enable LLM-assisted claim extraction (set ANTHROPIC_API_KEY)
+anthropic>=0.34.0

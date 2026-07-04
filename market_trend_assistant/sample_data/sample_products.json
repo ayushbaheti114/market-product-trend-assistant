@@ -1,0 +1,66 @@
+[
+  {
+    "brand": "NatureBloom",
+    "name": "Nightly Calm Gummies",
+    "sku": "NB-SLEEP-001",
+    "annual_revenue": 1250000,
+    "retailer": "Amazon",
+    "ocr_text": "NatureBloom Nightly Calm Gummies. Melatonin 5mg + Ashwagandha 200mg. Supports restful sleep. Helps calm the mind before bedtime. Promotes relaxation and reduces occasional stress. Non-GMO, Vegan, Gluten-Free."
+  },
+  {
+    "brand": "VitaCore",
+    "name": "Daily Immune Defense",
+    "sku": "VC-IMM-014",
+    "annual_revenue": 875000,
+    "retailer": "Walmart",
+    "ocr_text": "VitaCore Daily Immune Defense. Vitamin C 1000mg, Zinc 15mg, Elderberry Extract. Supports a healthy immune system. Helps maintain immunity year-round. Clinically studied ingredients."
+  },
+  {
+    "brand": "PeakPerform",
+    "name": "Pre-Workout Energy Blend",
+    "sku": "PP-ENG-007",
+    "annual_revenue": 2100000,
+    "retailer": "GNC",
+    "ocr_text": "PeakPerform Pre-Workout Energy Blend. Caffeine Anhydrous 200mg, L-Theanine 100mg. Boosts energy and enhances focus. Improves endurance and stamina during training. Supports mental clarity."
+  },
+  {
+    "brand": "GutHarmony",
+    "name": "Daily Probiotic Complex",
+    "sku": "GH-DIG-022",
+    "annual_revenue": 640000,
+    "retailer": "Target",
+    "ocr_text": "GutHarmony Daily Probiotic Complex. 50 Billion CFU Probiotics, Prebiotic Fiber. Supports digestive health and gut balance. Helps reduce occasional bloating. Promotes a healthy microbiome."
+  },
+  {
+    "brand": "SereneMind",
+    "name": "Stress & Mood Support",
+    "sku": "SM-STR-009",
+    "annual_revenue": 540000,
+    "retailer": "Amazon",
+    "ocr_text": "SereneMind Stress & Mood Support. Ashwagandha KSM-66 300mg, Magnesium Glycinate. Helps the body manage stress. Supports a balanced mood. Promotes calm without drowsiness. Also supports restful sleep for some users."
+  },
+  {
+    "brand": "FlexActive",
+    "name": "Joint Mobility Formula",
+    "sku": "FA-JNT-031",
+    "annual_revenue": 720000,
+    "retailer": "CVS",
+    "ocr_text": "FlexActive Joint Mobility Formula. Glucosamine Sulfate 1500mg, Collagen Peptides, Turmeric Curcumin. Supports joint health and flexibility. Helps maintain cartilage. Reduces occasional joint discomfort."
+  },
+  {
+    "brand": "GlowLab",
+    "name": "Beauty Collagen Boost",
+    "sku": "GL-BTY-018",
+    "annual_revenue": 480000,
+    "retailer": "Sephora",
+    "ocr_text": "GlowLab Beauty Collagen Boost. Hydrolyzed Collagen Peptides, Biotin, Vitamin C. Supports skin elasticity and radiance. Helps strengthen hair and nails. Promotes a youthful glow from within."
+  },
+  {
+    "brand": "MetaboLean",
+    "name": "Weight Management Support",
+    "sku": "ML-WGT-044",
+    "annual_revenue": 390000,
+    "retailer": "Walmart",
+    "ocr_text": "MetaboLean Weight Management Support. Green Tea Extract, Caffeine, Chromium. Boosts metabolism. Helps control appetite. Supports fat burn during exercise. Thermogenic formula."
+  }
+]
