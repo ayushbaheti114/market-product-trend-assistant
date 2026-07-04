@@ -1,8 +1,6 @@
 """
 ingestion/image_scraper.py
------------------------------
 Skeleton scraper for retailer/brand product packaging images.
-
 IMPORTANT (see brief Section 6, Constraints):
   - Many data sources will not offer API access; this module scrapes public
     HTML pages directly and must respect each site's robots.txt and terms
@@ -21,22 +19,18 @@ import os
 import time
 import sys
 from urllib.parse import urlparse
-
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import config
 from models import ProductImage, new_id
-
 REQUEST_DELAY_SECONDS = 2.0
 USER_AGENT = "MarketTrendAssistant/0.1 (research prototype; contact: data-team@example.com)"
-
 
 def _get_requests_session():
     import requests
     session = requests.Session()
     session.headers.update({"User-Agent": USER_AGENT})
     return session
-
-
+  
 def check_robots_allowed(url: str) -> bool:
     """Best-effort robots.txt check before scraping any page."""
     try:
@@ -50,8 +44,7 @@ def check_robots_allowed(url: str) -> bool:
     except Exception:
         # If robots.txt can't be read, default to NOT scraping (safe default).
         return False
-
-
+      
 def discover_product_image_urls(page_url: str, img_selector_hint: str = "img"):
     """Fetches a product page and returns candidate image URLs.
     Requires bs4/requests to be installed. Respects robots.txt."""
@@ -59,7 +52,6 @@ def discover_product_image_urls(page_url: str, img_selector_hint: str = "img"):
         raise PermissionError(f"robots.txt disallows fetching {page_url}")
 
     from bs4 import BeautifulSoup
-
     session = _get_requests_session()
     resp = session.get(page_url, timeout=15)
     resp.raise_for_status()
@@ -72,8 +64,7 @@ def discover_product_image_urls(page_url: str, img_selector_hint: str = "img"):
         if src:
             urls.append(src)
     return urls
-
-
+  
 def download_image(url: str, product_id: str) -> ProductImage:
     """Downloads an image to the local cache and returns a ProductImage
     record (OCR text populated separately by the Product Claims Agent)."""
@@ -81,11 +72,9 @@ def download_image(url: str, product_id: str) -> ProductImage:
     resp = session.get(url, timeout=15)
     resp.raise_for_status()
     time.sleep(REQUEST_DELAY_SECONDS)
-
     filename = os.path.join(config.IMAGE_CACHE_DIR, f"{new_id('img')}.jpg")
     with open(filename, "wb") as f:
         f.write(resp.content)
-
     return ProductImage(
         image_id=new_id("img"),
         product_id=product_id,
