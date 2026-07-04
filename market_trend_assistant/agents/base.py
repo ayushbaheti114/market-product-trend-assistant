@@ -1,6 +1,5 @@
 """
 agents/base.py
---------------
 Common base class for all agents. Provides consistent logging and an
 optional hook into the Claude API for agents that want LLM-assisted
 extraction when config.USE_LLM is True.
@@ -10,8 +9,6 @@ import os
 import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import config
-
-
 class BaseAgent:
     name = "base_agent"
 
@@ -39,6 +36,5 @@ class BaseAgent:
         return "".join(
             block.text for block in resp.content if getattr(block, "type", "") == "text"
         )
-
     def run(self, *args, **kwargs):
         raise NotImplementedError
